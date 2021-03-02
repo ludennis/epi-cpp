@@ -8,6 +8,8 @@
 #include <stack>
 #include <string>
 
+#include <gtest/gtest.h>
+
 bool IsOperator(std::string &s)
 {
   return s == "+" || s == "-" || s == "x" || s == "/";
@@ -30,7 +32,7 @@ void Evaluate(std::stack<int> &stack, std::string &op)
     stack.push(op1 * op2);
 }
 
-int EvaluateRPN(std::string &rpn)
+int EvaluateRPN(std::string rpn)
 {
   std::stack<int> stack;
 
@@ -60,12 +62,20 @@ int EvaluateRPN(std::string &rpn)
   return stack.top();
 }
 
+TEST(RpnTest, UnitTest)
+{
+  EXPECT_EQ(-4, EvaluateRPN("1,1,+,-2,x"));
+  EXPECT_EQ(15, EvaluateRPN("3,4,+,2,x,1,+"));
+}
+
 int main(int argc, char **argv)
 {
+  ::testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
+
 //  std::string rpn = "3,4,+,2,x,1,+";
-  std::string rpn = "1,1,+,-2,x";
-
-  std::cout << EvaluateRPN(rpn) << std::endl;
-
-  return 0;
+//  std::string rpn = "1,1,+,-2,x";
+//
+//  std::cout << EvaluateRPN(rpn) << std::endl;
 }
