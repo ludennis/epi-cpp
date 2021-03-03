@@ -9,6 +9,16 @@ struct TreeNode
   , right(nullptr)
   {}
 
+  void PushLeft(const T &t)
+  {
+    left = std::make_unique<TreeNode<T>>(t);
+  }
+
+  void PushRight(const T &t)
+  {
+    right = std::make_unique<TreeNode<T>>(t);
+  }
+
   T data;
   std::unique_ptr<TreeNode<T>> left;
   std::unique_ptr<TreeNode<T>> right;
