@@ -2,6 +2,8 @@
 
 #include <AVLNode.h>
 
+enum Direction {Left, Right};
+
 template <typename T>
 class AVLTree
 {
@@ -29,7 +31,6 @@ public:
   // TODO: call RotateLeft() and/or RotateRight() to maintain height balance
   void Insert(const T &t)
   {
-    // TODO: change it to recursive
     if (root == nullptr)
     {
       root = std::make_unique<AVLNode<T>>(t);
@@ -39,28 +40,12 @@ public:
     Insert(root, t);
   }
 
-  // TODO: to be put into private
-  void RotateRight(std::unique_ptr<AVLNode<T>> &node)
+  void Rotate(std::unique_ptr<AVLNode<T>> &node, Direction dir)
   {
-    if (node->left == nullptr)
-      return;
-    std::unique_ptr<AVLNode<T>> temp;
-    temp = std::move(node->left);
-    node->left = std::move(temp->right);
-    temp->right = std::move(node);
-    node = std::move(temp);
-  }
-
-  // TODO: to be put into private
-  void RotateLeft(std::unique_ptr<AVLNode<T>> &node)
-  {
-    if (node->right == nullptr)
-      return;
-    std::unique_ptr<AVLNode<T>> temp;
-    temp = std::move(node->right);
-    node->right = std::move(temp->left);
-    temp->left = std::move(node);
-    node = std::move(temp);
+    if (dir == Left)
+      RotateLeft(node);
+    else
+      RotateRight(node);
   }
 
 private:
@@ -120,6 +105,29 @@ private:
         return root->rightHeight;
       }
     }
+  }
+
+  void RotateRight(std::unique_ptr<AVLNode<T>> &node)
+  {
+    if (node->left == nullptr)
+      return;
+    std::unique_ptr<AVLNode<T>> temp;
+    temp = std::move(node->left);
+    node->left = std::move(temp->right);
+    temp->right = std::move(node);
+    node = std::move(temp);
+  }
+
+  // TODO: to be put into private
+  void RotateLeft(std::unique_ptr<AVLNode<T>> &node)
+  {
+    if (node->right == nullptr)
+      return;
+    std::unique_ptr<AVLNode<T>> temp;
+    temp = std::move(node->right);
+    node->right = std::move(temp->left);
+    temp->left = std::move(node);
+    node = std::move(temp);
   }
 };
 

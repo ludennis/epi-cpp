@@ -37,7 +37,7 @@ TEST(AVLTreeTest, RotateTest)
 {
   auto tree = AVLTree<int>(10);
 
-  tree.RotateLeft(tree.root);
+  tree.Rotate(tree.root, Direction::Left);
   EXPECT_EQ(10, tree.root->data);
 
 
@@ -46,19 +46,19 @@ TEST(AVLTreeTest, RotateTest)
   std::vector<int> expect{10,5,20};
   EXPECT_EQ(expect, tree.GetPreorder());
 
-  tree.RotateRight(tree.root);
+  tree.Rotate(tree.root, Direction::Right);
   expect = {5,10,20};
   EXPECT_EQ(expect, tree.GetPreorder());
 
-  tree.RotateLeft(tree.root);
+  tree.Rotate(tree.root, Direction::Left);
   expect = {10,5,20};
   EXPECT_EQ(expect, tree.GetPreorder());
 
-  tree.RotateLeft(tree.root);
+  tree.Rotate(tree.root, Direction::Left);
   expect = {20,10,5};
   EXPECT_EQ(expect, tree.GetPreorder());
 
-  tree.RotateRight(tree.root);
+  tree.Rotate(tree.root, Direction::Right);
   tree.Insert(2);
   tree.Insert(8);
   tree.Insert(3);
@@ -66,15 +66,15 @@ TEST(AVLTreeTest, RotateTest)
   expect = {10,5,2,3,8,20,30};
   EXPECT_EQ(expect, tree.GetPreorder());
 
-  tree.RotateRight(tree.root->left);
+  tree.Rotate(tree.root->left, Direction::Right);
   expect = {10,2,5,3,8,20,30};
   EXPECT_EQ(expect, tree.GetPreorder());
 
-  tree.RotateLeft(tree.root->right);
+  tree.Rotate(tree.root->right, Direction::Left);
   expect = {10,2,5,3,8,30,20};
   EXPECT_EQ(expect, tree.GetPreorder());
 
-  tree.RotateRight(tree.root);
+  tree.Rotate(tree.root, Direction::Right);
   expect = {2,10,5,3,8,30,20};
   EXPECT_EQ(expect, tree.GetPreorder());
 }
