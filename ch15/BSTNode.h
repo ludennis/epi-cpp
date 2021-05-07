@@ -12,12 +12,12 @@ struct BSTNode
   , right(nullptr)
   {}
 
-  void PushLeft(T data)
+  void PushLeft(const T &data)
   {
     left = std::make_unique<BSTNode<T>>(data);
   }
 
-  void PushRight(T data)
+  void PushRight(const T &data)
   {
     right = std::make_unique<BSTNode<T>>(data);
   }
