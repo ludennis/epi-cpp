@@ -80,6 +80,58 @@ TEST(AVLTreeTest, InsertTest)
   EXPECT_EQ(0, tree.root->right->right->leftHeight);
 }
 
+TEST(AVLTreeTest, DeleteTest)
+{
+  auto tree = AVLTree<int>(5);
+  tree.Insert(3);
+  tree.Insert(1);
+  tree.Insert(6);
+  tree.Insert(4);
+  tree.Insert(8);
+  tree.Insert(9);
+  std::vector<int> expect = {5,3,1,4,8,6,9};
+  EXPECT_EQ(expect, tree.GetPreorder());
+
+  // deletion of leaf node
+  tree.Delete(4);
+  expect = {5,3,1,8,6,9};
+  EXPECT_EQ(expect, tree.GetPreorder());
+  EXPECT_EQ(2, tree.root->leftHeight);
+  EXPECT_EQ(0, tree.root->left->rightHeight);
+
+  tree.Delete(1);
+  expect = {5,3,8,6,9};
+  EXPECT_EQ(expect, tree.GetPreorder());
+  EXPECT_EQ(1, tree.root->leftHeight);
+  EXPECT_EQ(0, tree.root->left->leftHeight);
+
+  // deleting a node with one child
+  tree.Insert(1);
+  expect = {5,3,1,8,6,9};
+  EXPECT_EQ(expect, tree.GetPreorder());
+  tree.Delete(3);
+  expect = {5,1,8,6,9};
+  EXPECT_EQ(expect, tree.GetPreorder());
+
+  tree.Insert(4);
+  expect = {5,1,4,8,6,9};
+  EXPECT_EQ(expect, tree.GetPreorder());
+  tree.Delete(1);
+  expect = {5,4,8,6,9};
+  EXPECT_EQ(expect, tree.GetPreorder());
+  EXPECT_EQ(1, tree.root->leftHeight);
+  EXPECT_EQ(0, tree.root->left->leftHeight);
+  EXPECT_EQ(0, tree.root->left->rightHeight);
+
+  tree.Delete(9);
+  tree.Delete(8);
+  expect = {5,4,6};
+  EXPECT_EQ(expect, tree.GetPreorder());
+  EXPECT_EQ(1, tree.root->rightHeight);
+  EXPECT_EQ(0, tree.root->right->leftHeight);
+  EXPECT_EQ(0, tree.root->right->rightHeight);
+}
+
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

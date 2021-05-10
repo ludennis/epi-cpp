@@ -40,6 +40,15 @@ public:
     Insert(root, t, traversal);
   }
 
+  void Delete(const T &t)
+  {
+    if (root == nullptr)
+      return;
+
+    std::vector<AVLNode<T>*> traversal;
+    Delete(root, t, traversal);
+  }
+
   void Rotate(std::unique_ptr<AVLNode<T>> &node, Direction dir)
   {
     if (dir == Left)
@@ -136,6 +145,59 @@ private:
         return root->rightHeight;
       }
     }
+  }
+
+  int Delete(std::unique_ptr<AVLNode<T>> &root, const T&t,
+    std::vector<AVLNode<T>*> &traversal)
+  {
+    if (root == nullptr)
+      return 0;
+
+    traversal.emplace_back(root.get());
+
+    // TODO: if root is deleted
+    if (root->data == t)
+    {
+      if (root->left == nullptr && root->right == nullptr)
+      { // if deletion is on a node without children
+        root.reset();
+        return -1;
+      }
+      else if ((root->left == nullptr && root->right != nullptr) ||
+               (root->left != nullptr && root->right == nullptr))
+      { // if deletion is on a node with one child
+        auto parent = traversal[traversal.size() - 2];
+        auto newChild = (root->left != nullptr) ? root->left.get() : root->right.get();
+        if (parent->left == root)
+          parent->left = (root->left != nullptr) ? std::move(root->left) : std::move(root->right);
+        else
+          parent->right = (root->left != nullptr) ? std::move(root->left) : std::move(root->right);
+        return std::max(root->leftHeight, root->rightHeight);
+      }
+      else if (root->left != nullptr && root->right != nullptr)
+      { // if deletion is on a node with both children
+        std::cout << "succesor is = " << GetSuccessor(root) << std::endl;
+        root->
+      }
+      // TODO: maintain height of tree
+      return 0;
+    }
+    else if (t > root->data)
+    {
+      auto updatedRightHeight = Delete(root->right, t, traversal) + 1;
+      root->rightHeight = updatedRightHeight;
+      return std::max(root->leftHeight, root->rightHeight);
+    }
+    else
+    {
+      auto updatedLeftHeight = Delete(root->left, t, traversal) + 1;
+      root->leftHeight = updatedLeftHeight;
+      return std::max(root->leftHeight, root->rightHeight);
+    }
+  }
+
+  int GetSuccessor(const std::unique_ptr<AVLNode<T>> &root)
+  {
   }
 
   void MaintainBalance(std::unique_ptr<AVLNode<T>> &root, std::vector<AVLNode<T>*> &traversal)
